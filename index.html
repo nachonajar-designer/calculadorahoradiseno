@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Costo por hora de diseño</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Diseño ITESO: blanco, Azul ITESO primario, Rosa ITESO acento, casi negro para texto */
+  /* Layout: captura a la izquierda, resultados fijos a la derecha; una columna en teléfono */
+  --bg: #ffffff;
+  --ink: #141311;
+  --muted: #5d6470;
+  --line: #dfe3e8;
+  --soft: #f3f6f9;
+  --azul: #075585;
+  --azul-soft: #e6eff5;
+  --rosa: #EA185B;
+  --ok: #1d7a46;
+  --warn: #b3261e;
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --radius: 8px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 60px; }
+header.top { display: grid; gap: 14px; margin-bottom: 22px; }
+.kicker { color: var(--rosa); font-weight: 700; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.05; margin: 0; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
+.byline { margin: -4px 0 0; font-size: 14px; color: var(--azul); }
+.byline strong { font-weight: 700; }
+.lead { color: var(--muted); max-width: 66ch; margin: 0; }
+.bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--azul); border-radius: 999px; overflow: hidden; }
+.seg button { border: 0; background: transparent; color: var(--azul); padding: 8px 16px; font: 600 14px var(--font); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--azul); color: #fff; }
+.btn { border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 8px 14px; border-radius: 999px; font: 500 14px var(--font); cursor: pointer; }
+.btn:hover { border-color: var(--azul); color: var(--azul); }
+.btn.primary { background: var(--rosa); border-color: var(--rosa); color: #fff; font-weight: 600; }
+.btn.primary:hover { filter: brightness(0.95); color: #fff; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--rosa); outline-offset: 2px; }
+.field-inline { display: flex; gap: 8px; align-items: center; flex: 1 1 260px; }
+.field-inline label { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.field-inline input { flex: 1; }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 28px; align-items: start; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+section.block { border-top: 2px solid var(--ink); padding: 14px 0 22px; display: grid; gap: 12px; }
+.block h2 { margin: 0; font-size: 18px; font-weight: 700; display: flex; gap: 10px; align-items: baseline; }
+.num { color: var(--rosa); font-weight: 800; font-size: 22px; min-width: 1.2em; }
+.hint { color: var(--muted); font-size: 13px; margin: 0; max-width: 70ch; }
+
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 12px; color: var(--muted); font-weight: 600; padding: 4px 6px; border-bottom: 1px solid var(--line); }
+td { padding: 3px 4px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th.r, td.r { text-align: right; }
+.tablebox { overflow-x: auto; }
+input[type="text"], input[type="number"] {
+  width: 100%; border: 1px solid transparent; background: var(--soft); border-radius: 6px;
+  padding: 7px 8px; font: 500 15px var(--font); color: var(--azul); font-variant-numeric: tabular-nums;
+}
+input[type="number"] { text-align: right; }
+input:hover { border-color: var(--line); }
+input:focus { background: #fff; border-color: var(--azul); outline: none; }
+.del { border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 18px; line-height: 1; padding: 4px 8px; border-radius: 6px; }
+.del:hover { color: var(--warn); background: #fbecec; }
+.add { justify-self: start; }
+tfoot td { font-weight: 700; border-bottom: 0; padding: 8px 6px; }
+
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 16px; }
+.pfield { display: grid; grid-template-columns: 1fr 96px; gap: 8px; align-items: center; background: var(--soft); border-radius: var(--radius); padding: 8px 10px; }
+.pfield label { font-size: 14px; }
+.pfield small { display: block; color: var(--muted); font-size: 12px; }
+.pfield input { background: #fff; }
+.pct { position: relative; }
+.pct::after { content: "%"; position: absolute; right: 9px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; pointer-events: none; }
+.pct input { padding-right: 24px; }
+
+aside.results { position: sticky; top: 16px; display: grid; gap: 14px; }
+@media (max-width: 900px) { aside.results { position: static; } }
+.card { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 8px; }
+.card h3 { margin: 0; font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; display: flex; gap: 8px; align-items: baseline; }
+.card h3 .num { font-size: 16px; }
+.price { background: var(--azul); border-color: var(--azul); color: #fff; }
+.price h3 { color: #cfe0ec; }
+.big { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+.price .sub { color: #cfe0ec; font-size: 13px; }
+.row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
+.row span:last-child { font-weight: 600; white-space: nowrap; }
+.row.total { border-top: 1px solid var(--line); padding-top: 6px; font-weight: 700; }
+.price .row.total { border-color: rgba(255,255,255,.25); }
+.pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.pill.ok { background: #e3f3ea; color: var(--ok); }
+.pill.bad { background: #fbecec; color: var(--warn); }
+.alert { background: #fbecec; color: var(--warn); border-radius: var(--radius); padding: 10px 12px; font-size: 14px; display: none; }
+.alert.show { display: block; }
+.toast { font-size: 13px; color: var(--ok); min-height: 1.2em; }
+footer { color: var(--muted); font-size: 12px; margin-top: 30px; border-top: 1px solid var(--line); padding-top: 12px; max-width: 80ch; }
+@media (prefers-reduced-motion: no-preference) { .big { transition: color .2s; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="kicker">Diseño ITESO · Costeo de proyectos de branding</div>
+    <h1>¿Cuánto cuesta tu hora de diseño?</h1>
+    <p class="byline">Diseñado por <strong>Nacho Nájar</strong> · Diseñador Estratégico</p>
+    <p class="lead">Captura tus gastos, tu equipo y tus porcentajes. Los resultados de la derecha se calculan solos. Los datos que ya vienen son un ejemplo: cámbialos por los tuyos.</p>
+    <div class="bar">
+      <div class="seg" role="group" aria-label="Tipo de práctica">
+        <button type="button" id="mode-freelance" data-mode="freelance">Freelance</button>
+        <button type="button" id="mode-despacho" data-mode="despacho">Despacho</button>
+      </div>
+      <div class="field-inline">
+        <label for="alumno">Tu nombre o proyecto</label>
+        <input type="text" id="alumno" placeholder="Ej. Ana López · Estudio Ámbar">
+      </div>
+      <button type="button" class="btn" id="btn-ejemplo">Restaurar ejemplo</button>
+      <button type="button" class="btn" id="btn-blanco">Empezar en blanco</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main>
+      <section class="block" aria-labelledby="h-gastos">
+        <h2 id="h-gastos"><span class="num">1</span>Gastos fijos mensuales de operación</h2>
+        <p class="hint">Todo lo que pagas cada mes para operar, sin sueldos. Si un gasto es anual, divídelo entre 12.</p>
+        <div class="tablebox">
+          <table>
+            <thead><tr><th>Concepto</th><th class="r" style="width:150px">Monto mensual</th><th style="width:40px"><span class="sr" hidden>Quitar</span></th></tr></thead>
+            <tbody id="gastos"></tbody>
+            <tfoot><tr><td>Subtotal operación</td><td class="r" id="t-oper"></td><td></td></tr></tfoot>
+          </table>
+        </div>
+        <button type="button" class="btn add" id="add-gasto">+ Agregar gasto</button>
+      </section>
+
+      <section class="block" aria-labelledby="h-personas">
+        <h2 id="h-personas"><span class="num">2</span>Personas y horas</h2>
+        <p class="hint">Horas productivas son las que dedicas a diseñar y puedes cobrar: sin juntas, correos ni administración. Si es freelance, la persona eres tú y el sueldo es lo que necesitas ganar al mes.</p>
+        <div class="tablebox">
+          <table>
+            <thead><tr><th>Persona / rol</th><th class="r" style="width:110px">Horas al mes</th><th class="r" style="width:110px">Horas productivas</th><th class="r" style="width:140px">Sueldo mensual</th><th style="width:40px"></th></tr></thead>
+            <tbody id="personas"></tbody>
+            <tfoot><tr><td>Total</td><td class="r" id="t-hm"></td><td class="r" id="t-hp"></td><td class="r" id="t-sue"></td><td></td></tr></tfoot>
+          </table>
+        </div>
+        <button type="button" class="btn add" id="add-persona">+ Agregar persona</button>
+        <div class="grid2">
+          <div class="pfield"><label for="merma">Merma<small>Tiempo que se pierde aun en horas productivas: cambios, retrabajo.</small></label><div class="pct"><input type="number" id="merma" min="0" max="99" step="1"></div></div>
+        </div>
+      </section>
+
+      <section class="block" aria-labelledby="h-nomina">
+        <h2 id="h-nomina"><span class="num">3</span>Cargas de nómina</h2>
+        <p class="hint">Se calculan como porcentaje de los sueldos. Si eres freelance y no tienes empleados, déjalas en 0.</p>
+        <div class="grid2">
+          <div class="pfield"><label for="imss">IMSS e Infonavit<small>Aproximado del costo patronal.</small></label><div class="pct"><input type="number" id="imss" min="0" step="0.5"></div></div>
+          <div class="pfield"><label for="isn">Impuesto estatal sobre nómina<small>Jalisco 2026: 3%.</small></label><div class="pct"><input type="number" id="isn" min="0" step="0.5"></div></div>
+        </div>
+      </section>
+
+      <section class="block" aria-labelledby="h-pct">
+        <h2 id="h-pct"><span class="num">4</span>Porcentajes sobre el precio de venta</h2>
+        <p class="hint">Estos porcentajes salen del precio que paga el cliente, no del costo. Por eso el precio se calcula como costo ÷ (1 − suma de porcentajes).</p>
+        <div class="grid2">
+          <div class="pfield"><label for="com">Comisiones<small>Comercialización / atención.</small></label><div class="pct"><input type="number" id="com" min="0" step="0.5"></div></div>
+          <div class="pfield"><label for="imp">Impuestos sobre ingresos<small>Estimado. Confírmalo con tu contador.</small></label><div class="pct"><input type="number" id="imp" min="0" step="0.5"></div></div>
+          <div class="pfield"><label for="uti">Utilidad deseada<small>Lo que quieres que te quede.</small></label><div class="pct"><input type="number" id="uti" min="0" step="0.5"></div></div>
+          <div class="pfield"><label for="iva">IVA<small>Se cobra encima y se paga al SAT.</small></label><div class="pct"><input type="number" id="iva" min="0" step="0.5"></div></div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="results" aria-label="Resultados">
+      <div class="alert" id="alert" role="alert"></div>
+
+      <div class="card price">
+        <h3>Precio por hora</h3>
+        <div class="big" id="r-precio">$0</div>
+        <div class="sub">más IVA · con IVA: <strong id="r-precio-iva">$0</strong></div>
+      </div>
+
+      <div class="card">
+        <h3><span class="num">5</span>Costo por hora</h3>
+        <div class="row"><span>Horas efectivas al mes</span><span id="r-hef"></span></div>
+        <div class="row"><span>Costo de operación por hora</span><span id="r-cop"></span></div>
+        <div class="row"><span>Costo de nómina por hora</span><span id="r-cnom"></span></div>
+        <div class="row total"><span>Costo total por hora</span><span id="r-costo"></span></div>
+      </div>
+
+      <div class="card">
+        <h3><span class="num">6</span>Cómo se forma el precio</h3>
+        <div class="row"><span>Costo total por hora</span><span id="p-costo"></span></div>
+        <div class="row"><span>+ Comisión</span><span id="p-com"></span></div>
+        <div class="row"><span>+ Impuestos</span><span id="p-imp"></span></div>
+        <div class="row"><span>+ Utilidad</span><span id="p-uti"></span></div>
+        <div class="row total"><span>Precio por hora (más IVA)</span><span id="p-precio"></span></div>
+      </div>
+
+      <div class="card">
+        <h3><span class="num">7</span>¿Cuánto queda al mes?</h3>
+        <p class="hint">Si vendieras todas tus horas efectivas. Es el techo, no lo normal.</p>
+        <div class="row"><span>Ingreso potencial (sin IVA)</span><span id="m-ing"></span></div>
+        <div class="row"><span>− Gastos de operación</span><span id="m-oper"></span></div>
+        <div class="row"><span>− Nómina y cargas</span><span id="m-nom"></span></div>
+        <div class="row"><span>− Comisiones</span><span id="m-com"></span></div>
+        <div class="row"><span>− Impuestos</span><span id="m-imp"></span></div>
+        <div class="row total"><span>Utilidad real del mes</span><span id="m-uti"></span></div>
+        <div class="row"><span>Utilidad real / ingreso</span><span><span class="pill ok" id="m-pct">0%</span></span></div>
+      </div>
+
+      <button type="button" class="btn primary" id="btn-pdf">Descargar PDF</button>
+      <div class="toast" id="toast" aria-live="polite"></div>
+    </aside>
+  </div>
+
+  <footer>
+    Los porcentajes de impuestos son estimados para fines del ejercicio; cada régimen fiscal es distinto. Tus datos se guardan solo en este navegador.
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var EJEMPLOS = {
+    freelance: {
+      gastos: [
+        ["Renta", 0], ["Luz", 0], ["Agua", 0], ["Internet", 0], ["Teléfono IP", 0], ["Limpieza", 0],
+        ["Licencia Adobe", 580], ["Contador", 800], ["Servicios bancarios", 150],
+        ["Hosting para correo electrónico", 100], ["Gasolina", 1200], ["Papelería", 500],
+        ["Suscripción banco de imágenes", 0], ["Gastos de oficina - café, galletas", 200],
+        ["Teléfono celular", 600], ["Imprevistos", 500], ["Licencias Fusion", 0],
+        ["Reposición de equipo (computadoras, tableta)", 0], ["Tipografías, mockups e impresión de pruebas", 0]
+      ],
+      personas: [["Kike", 160, 80, 15000]],
+      merma: 10, imss: 0, isn: 0, com: 0, imp: 5, uti: 30, iva: 16
+    },
+    despacho: {
+      gastos: [
+        ["Renta", 20000], ["Luz", 2000], ["Agua", 500], ["Internet", 1200], ["Teléfono IP", 0],
+        ["Limpieza", 3200], ["Licencias Adobe x 6", 2900], ["Contador", 1200], ["Servicios bancarios", 150],
+        ["Hosting para correo electrónico", 100], ["Ubers", 1200], ["Papelería", 1000],
+        ["Suscripción banco de imágenes", 0], ["Gastos de oficina - café, galletas", 500],
+        ["Teléfono celular x 6", 0], ["Imprevistos", 2000], ["Licencias Fusion", 0],
+        ["Reposición de equipo (computadoras, tableta)", 0], ["Tipografías, mockups e impresión de pruebas", 0]
+      ],
+      personas: [
+        ["Kike - diseño", 160, 80, 20000], ["Manu - diseño", 160, 80, 20000],
+        ["Brizza - diseño", 160, 160, 20000], ["Isa - diseño", 160, 160, 20000],
+        ["Karla - diseño", 160, 160, 20000], ["Andrea - Project Manager", 160, 0, 20000]
+      ],
+      merma: 10, imss: 30, isn: 3, com: 5, imp: 5, uti: 30, iva: 16
+    }
+  };
+
+  var KEY = "costo-hora-iteso-v1";
+  var state = { mode: "freelance", alumno: "", data: {} };
+
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function num(v) { var n = parseFloat(v); return isFinite(n) ? n : 0; }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) { var s = JSON.parse(raw); if (s && s.data) { state = s; } }
+    } catch (e) {}
+    ["freelance", "despacho"].forEach(function (m) { if (!state.data[m]) state.data[m] = clone(EJEMPLOS[m]); });
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  // Cálculo puro: mismo modelo que el Excel corregido
+  function calcular(d) {
+    var oper = d.gastos.reduce(function (a, g) { return a + num(g[1]); }, 0);
+    var hm = 0, hp = 0, sue = 0;
+    d.personas.forEach(function (p) { hm += num(p[1]); hp += num(p[2]); sue += num(p[3]); });
+    var carga = sue * num(d.imss) / 100;
+    var isn = sue * num(d.isn) / 100;
+    var nomina = sue + carga + isn;
+    var total = oper + nomina;
+    var hef = hp * (1 - num(d.merma) / 100);
+    var cop = hef > 0 ? oper / hef : 0;
+    var cnom = hef > 0 ? nomina / hef : 0;
+    var costo = cop + cnom;
+    var pc = num(d.com) / 100, pi = num(d.imp) / 100, pu = num(d.uti) / 100;
+    var suma = pc + pi + pu;
+    var precio = suma < 1 ? costo / (1 - suma) : 0;
+    var ing = hef * precio;
+    var mCom = ing * pc, mImp = ing * pi;
+    var mUti = ing - total - mCom - mImp;
+    return {
+      oper: oper, hm: hm, hp: hp, sue: sue, nomina: nomina, total: total, hef: hef,
+      cop: cop, cnom: cnom, costo: costo, suma: suma, precio: precio,
+      pCom: precio * pc, pImp: precio * pi, pUti: precio * pu,
+      iva: precio * num(d.iva) / 100, ing: ing, mCom: mCom, mImp: mImp, mUti: mUti,
+      mPct: ing > 0 ? mUti / ing : 0, pu: pu
+    };
+  }
+
+  var fmt = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN", minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function $(id) { return document.getElementById(id); }
+  function money(v) { return fmt.format(v).replace("MX$", "$"); }
+  function pctTxt(v) { return (Math.round(v * 1000) / 10).toLocaleString("es-MX") + "%"; }
+  function hrs(v) { return (Math.round(v * 10) / 10).toLocaleString("es-MX") + " h"; }
+
+  function rowInput(type, value, attrs) {
+    var i = document.createElement("input");
+    i.type = type; i.value = value === null || value === undefined ? "" : value;
+    Object.keys(attrs || {}).forEach(function (k) { i.setAttribute(k, attrs[k]); });
+    return i;
+  }
+
+  function renderTables() {
+    var d = state.data[state.mode];
+    var gb = $("gastos"); gb.innerHTML = "";
+    d.gastos.forEach(function (g, idx) {
+      var tr = document.createElement("tr");
+      var t1 = document.createElement("td"), t2 = document.createElement("td"), t3 = document.createElement("td");
+      var a = rowInput("text", g[0], { id: "g-c-" + idx, "aria-label": "Concepto del gasto " + (idx + 1) });
+      var b = rowInput("number", g[1], { id: "g-m-" + idx, min: "0", step: "50", inputmode: "decimal", "aria-label": "Monto de " + (g[0] || "gasto") });
+      a.addEventListener("input", function () { g[0] = a.value; save(); });
+      b.addEventListener("input", function () { g[1] = b.value; update(); });
+      var x = document.createElement("button"); x.type = "button"; x.className = "del"; x.textContent = "×";
+      x.setAttribute("aria-label", "Quitar " + (g[0] || "gasto"));
+      x.addEventListener("click", function () { d.gastos.splice(idx, 1); renderTables(); update(); });
+      t1.appendChild(a); t2.appendChild(b); t3.appendChild(x);
+      tr.appendChild(t1); tr.appendChild(t2); tr.appendChild(t3); gb.appendChild(tr);
+    });
+    var pb = $("personas"); pb.innerHTML = "";
+    d.personas.forEach(function (p, idx) {
+      var tr = document.createElement("tr");
+      var cells = [
+        rowInput("text", p[0], { id: "p-n-" + idx, "aria-label": "Persona o rol " + (idx + 1) }),
+        rowInput("number", p[1], { id: "p-hm-" + idx, min: "0", step: "1", inputmode: "decimal", "aria-label": "Horas al mes" }),
+        rowInput("number", p[2], { id: "p-hp-" + idx, min: "0", step: "1", inputmode: "decimal", "aria-label": "Horas productivas" }),
+        rowInput("number", p[3], { id: "p-s-" + idx, min: "0", step: "500", inputmode: "decimal", "aria-label": "Sueldo mensual" })
+      ];
+      cells.forEach(function (inp, k) {
+        var td = document.createElement("td");
+        inp.addEventListener("input", function () { p[k] = inp.value; if (k === 0) { save(); } else { update(); } });
+        td.appendChild(inp); tr.appendChild(td);
+      });
+      var td = document.createElement("td");
+      var x = document.createElement("button"); x.type = "button"; x.className = "del"; x.textContent = "×";
+      x.setAttribute("aria-label", "Quitar " + (p[0] || "persona"));
+      x.addEventListener("click", function () { d.personas.splice(idx, 1); renderTables(); update(); });
+      td.appendChild(x); tr.appendChild(td); pb.appendChild(tr);
+    });
+  }
+
+  var SIMPLE = ["merma", "imss", "isn", "com", "imp", "uti", "iva"];
+
+  function renderAll() {
+    var d = state.data[state.mode];
+    $("mode-freelance").setAttribute("aria-pressed", state.mode === "freelance");
+    $("mode-despacho").setAttribute("aria-pressed", state.mode === "despacho");
+    $("alumno").value = state.alumno || "";
+    SIMPLE.forEach(function (k) { $(k).value = d[k]; });
+    renderTables();
+    update();
+  }
+
+  function update() {
+    var d = state.data[state.mode];
+    var r = calcular(d);
+    $("t-oper").textContent = money(r.oper);
+    $("t-hm").textContent = r.hm.toLocaleString("es-MX");
+    $("t-hp").textContent = r.hp.toLocaleString("es-MX");
+    $("t-sue").textContent = money(r.sue);
+    $("r-hef").textContent = hrs(r.hef);
+    $("r-cop").textContent = money(r.cop);
+    $("r-cnom").textContent = money(r.cnom);
+    $("r-costo").textContent = money(r.costo);
+    $("p-costo").textContent = money(r.costo);
+    $("p-com").textContent = money(r.pCom);
+    $("p-imp").textContent = money(r.pImp);
+    $("p-uti").textContent = money(r.pUti);
+    $("p-precio").textContent = money(r.precio);
+    $("r-precio").textContent = money(r.precio);
+    $("r-precio-iva").textContent = money(r.precio + r.iva);
+    $("m-ing").textContent = money(r.ing);
+    $("m-oper").textContent = money(r.oper);
+    $("m-nom").textContent = money(r.nomina);
+    $("m-com").textContent = money(r.mCom);
+    $("m-imp").textContent = money(r.mImp);
+    $("m-uti").textContent = money(r.mUti);
+    var pill = $("m-pct");
+    pill.textContent = pctTxt(r.mPct);
+    var okk = r.ing > 0 && Math.abs(r.mPct - r.pu) < 0.0005;
+    pill.className = "pill " + (okk ? "ok" : "bad");
+
+    var msgs = [];
+    if (r.suma >= 1) msgs.push("Comisiones, impuestos y utilidad suman 100% o más. Bájalos para que el precio se pueda calcular.");
+    if (r.hef <= 0) msgs.push("No hay horas efectivas. Captura horas productivas en la tabla de personas.");
+    if (num(d.merma) >= 100) msgs.push("La merma no puede ser 100% o más.");
+    var al = $("alert");
+    al.textContent = msgs.join(" ");
+    al.className = "alert" + (msgs.length ? " show" : "");
+    save();
+    return r;
+  }
+
+  function resumen() {
+    var d = state.data[state.mode];
+    var r = calcular(d);
+    var L = [];
+    L.push("COSTO POR HORA — " + (state.mode === "freelance" ? "FREELANCE" : "DESPACHO"));
+    if (state.alumno) L.push(state.alumno);
+    L.push("");
+    L.push("Gastos de operación al mes: " + money(r.oper));
+    L.push("Nómina y cargas al mes: " + money(r.nomina) + " (" + d.personas.length + (d.personas.length === 1 ? " persona" : " personas") + ")");
+    L.push("Horas efectivas al mes: " + hrs(r.hef) + " (merma " + num(d.merma) + "%)");
+    L.push("Costo por hora: " + money(r.costo));
+    L.push("Porcentajes: comisión " + num(d.com) + "%, impuestos " + num(d.imp) + "%, utilidad " + num(d.uti) + "%");
+    L.push("PRECIO POR HORA: " + money(r.precio) + " más IVA (" + money(r.precio + r.iva) + " con IVA)");
+    L.push("Utilidad real del mes (si vendo todas las horas): " + money(r.mUti) + " = " + pctTxt(r.mPct) + " del ingreso");
+    L.push("");
+    L.push("Gastos:");
+    d.gastos.forEach(function (g) { if (num(g[1]) > 0) L.push("· " + (g[0] || "Sin nombre") + ": " + money(num(g[1]))); });
+    L.push("Equipo:");
+    d.personas.forEach(function (p) { L.push("· " + (p[0] || "Sin nombre") + ": " + num(p[2]) + " h productivas de " + num(p[1]) + ", sueldo " + money(num(p[3]))); });
+    return L.join("\n");
+  }
+
+  // ---------- PDF ----------
+  function slug(t) {
+    return (t || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+  }
+
+  function construirPDF() {
+    var J = window.jspdf && window.jspdf.jsPDF;
+    if (!J) return null;
+    var d = state.data[state.mode];
+    var r = calcular(d);
+    var doc = new J({ unit: "mm", format: "letter" });
+    var W = 215.9, M = 18, y = 0;
+    var AZUL = [7, 85, 133], ROSA = [234, 24, 91], INK = [20, 19, 17], MUTED = [93, 100, 112], LINE = [223, 227, 232];
+    var modo = state.mode === "freelance" ? "Freelance" : "Despacho";
+
+    function color(c) { doc.setTextColor(c[0], c[1], c[2]); }
+    function page() { if (y > 255) { doc.addPage(); y = 20; } }
+    function fila(label, valor, bold) {
+      page();
+      doc.setFont("helvetica", bold ? "bold" : "normal"); doc.setFontSize(10); color(INK);
+      doc.text(label, M, y);
+      doc.text(valor, W - M, y, { align: "right" });
+      y += 6;
+    }
+    function linea() { doc.setDrawColor(LINE[0], LINE[1], LINE[2]); doc.setLineWidth(0.3); doc.line(M, y - 4, W - M, y - 4); }
+    function titulo(n, t) {
+      y += 4; page();
+      doc.setDrawColor(INK[0], INK[1], INK[2]); doc.setLineWidth(0.6); doc.line(M, y - 5, W - M, y - 5);
+      doc.setFont("helvetica", "bold"); doc.setFontSize(13); color(ROSA); doc.text(String(n), M, y + 1);
+      color(INK); doc.text(t, M + 8, y + 1);
+      y += 9;
+    }
+
+    // Encabezado
+    doc.setFillColor(AZUL[0], AZUL[1], AZUL[2]); doc.rect(0, 0, W, 48, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold"); doc.setFontSize(9);
+    doc.text("DISEÑO ITESO · COSTEO DE PROYECTOS DE BRANDING", M, 14);
+    doc.setFontSize(20); doc.text("Costo por hora · " + modo, M, 25);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+    var hoy = new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+    doc.text((state.alumno ? state.alumno + "  ·  " : "") + hoy, M, 33);
+    doc.setFontSize(8); doc.setTextColor(207, 224, 236);
+    doc.text("Calculadora diseñada por Nacho Nájar · Diseñador Estratégico", M, 42);
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(9); doc.text("PRECIO POR HORA", W - M, 14, { align: "right" });
+    doc.setFont("helvetica", "bold"); doc.setFontSize(26); doc.text(money(r.precio), W - M, 27, { align: "right" });
+    doc.setFont("helvetica", "normal"); doc.setFontSize(9);
+    doc.text("más IVA  ·  con IVA: " + money(r.precio + r.iva), W - M, 34, { align: "right" });
+    y = 62;
+
+    titulo(1, "Costo por hora");
+    fila("Gastos de operación al mes", money(r.oper));
+    fila("Nómina y cargas al mes", money(r.nomina));
+    fila("Total de costos al mes", money(r.total), true);
+    fila("Horas efectivas al mes (merma " + num(d.merma) + "%)", hrs(r.hef));
+    fila("Costo de operación por hora", money(r.cop));
+    fila("Costo de nómina por hora", money(r.cnom));
+    y += 1; linea();
+    fila("Costo total por hora", money(r.costo), true);
+
+    titulo(2, "Cómo se forma el precio");
+    fila("Costo total por hora", money(r.costo));
+    fila("+ Comisión (" + num(d.com) + "% del precio)", money(r.pCom));
+    fila("+ Impuestos (" + num(d.imp) + "% del precio)", money(r.pImp));
+    fila("+ Utilidad (" + num(d.uti) + "% del precio)", money(r.pUti));
+    y += 1; linea();
+    fila("Precio por hora (más IVA)", money(r.precio), true);
+    fila("IVA (" + num(d.iva) + "%)", money(r.iva));
+    fila("Precio por hora con IVA", money(r.precio + r.iva), true);
+
+    titulo(3, "¿Cuánto queda al mes?");
+    doc.setFont("helvetica", "italic"); doc.setFontSize(9); color(MUTED);
+    doc.text("Si se vendieran todas las horas efectivas. Es el techo, no lo normal.", M, y); y += 6;
+    fila("Ingreso potencial (sin IVA)", money(r.ing));
+    fila("- Gastos de operación", money(r.oper));
+    fila("- Nómina y cargas", money(r.nomina));
+    fila("- Comisiones", money(r.mCom));
+    fila("- Impuestos", money(r.mImp));
+    y += 1; linea();
+    fila("Utilidad real del mes", money(r.mUti), true);
+    fila("Utilidad real / ingreso", pctTxt(r.mPct), true);
+
+    titulo(4, "Gastos fijos mensuales de operación");
+    var hay = false;
+    d.gastos.forEach(function (g) { if (num(g[1]) > 0) { hay = true; fila(g[0] || "Sin nombre", money(num(g[1]))); } });
+    if (!hay) fila("Sin gastos capturados", money(0));
+    y += 1; linea();
+    fila("Subtotal operación", money(r.oper), true);
+
+    titulo(5, "Equipo y nómina");
+    page();
+    doc.setFont("helvetica", "bold"); doc.setFontSize(9); color(MUTED);
+    var cx = [M, 120, 150, W - M];
+    doc.text("Persona / rol", cx[0], y); doc.text("Horas al mes", cx[1], y, { align: "right" });
+    doc.text("Productivas", cx[2], y, { align: "right" }); doc.text("Sueldo", cx[3], y, { align: "right" });
+    y += 6;
+    d.personas.forEach(function (p) {
+      page();
+      doc.setFont("helvetica", "normal"); doc.setFontSize(10); color(INK);
+      doc.text(String(p[0] || "Sin nombre"), cx[0], y);
+      doc.text(String(num(p[1])), cx[1], y, { align: "right" });
+      doc.text(String(num(p[2])), cx[2], y, { align: "right" });
+      doc.text(money(num(p[3])), cx[3], y, { align: "right" });
+      y += 6;
+    });
+    y += 1; linea();
+    fila("Sueldos", money(r.sue), true);
+    fila("IMSS e Infonavit (" + num(d.imss) + "% de sueldos)", money(r.sue * num(d.imss) / 100));
+    fila("Impuesto estatal sobre nómina (" + num(d.isn) + "% de sueldos)", money(r.sue * num(d.isn) / 100));
+
+    // Pie
+    var n = doc.getNumberOfPages();
+    for (var i = 1; i <= n; i++) {
+      doc.setPage(i);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(8); color(MUTED);
+      doc.text("Porcentajes de impuestos estimados para fines del ejercicio; cada régimen fiscal es distinto.", M, 270);
+      doc.text(i + " / " + n, W - M, 270, { align: "right" });
+    }
+    return doc;
+  }
+
+  var downloadsNS = null;
+  try {
+    if (window.claude && typeof window.claude.use === "function") {
+      window.claude.use("downloads").then(function (ns) { downloadsNS = ns; }, function () {});
+    }
+  } catch (e) {}
+
+  function descargarPDF() {
+    var doc = construirPDF();
+    if (!doc) { toast("No se pudo cargar el generador de PDF. Revisa tu conexión y recarga la página."); return; }
+    var nombre = "costo-por-hora-" + state.mode + (state.alumno ? "-" + slug(state.alumno) : "") + ".pdf";
+    var blob = doc.output("blob");
+    if (downloadsNS) {
+      downloadsNS.save({ filename: nombre, data: blob }).then(function (res) {
+        if (res && res.status === "saved") toast("PDF descargado. Súbelo a tu entrega de Canvas.");
+      }, function (err) {
+        var c = err && err.code;
+        if (c === "declined") toast("No se descargó el PDF.");
+        else if (c === "rate_limited") toast("Espera un momento e inténtalo otra vez.");
+        else toast("Este navegador no permite descargar el PDF desde aquí.");
+      });
+    } else if (window.claude) {
+      toast("La descarga aún no está lista. Espera unos segundos e inténtalo otra vez.");
+    } else {
+      doc.save(nombre);
+      toast("PDF descargado. Súbelo a tu entrega de Canvas.");
+    }
+  }
+
+  function toast(t) { var el = $("toast"); el.textContent = t; setTimeout(function () { if (el.textContent === t) el.textContent = ""; }, 3500); }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    load();
+    ["mode-freelance", "mode-despacho"].forEach(function (id) {
+      $(id).addEventListener("click", function () { state.mode = $(id).getAttribute("data-mode"); renderAll(); });
+    });
+    $("alumno").addEventListener("input", function () { state.alumno = $("alumno").value; save(); });
+    SIMPLE.forEach(function (k) {
+      $(k).addEventListener("input", function () { state.data[state.mode][k] = $(k).value; update(); });
+    });
+    $("add-gasto").addEventListener("click", function () {
+      state.data[state.mode].gastos.push(["", 0]); renderTables(); update();
+      var n = state.data[state.mode].gastos.length - 1; var el = $("g-c-" + n); if (el) el.focus();
+    });
+    $("add-persona").addEventListener("click", function () {
+      state.data[state.mode].personas.push(["", 160, 0, 0]); renderTables(); update();
+      var n = state.data[state.mode].personas.length - 1; var el = $("p-n-" + n); if (el) el.focus();
+    });
+    $("btn-ejemplo").addEventListener("click", function () {
+      state.data[state.mode] = clone(EJEMPLOS[state.mode]); renderAll(); toast("Se restauró el ejemplo.");
+    });
+    $("btn-blanco").addEventListener("click", function () {
+      var e = EJEMPLOS[state.mode];
+      state.data[state.mode] = {
+        gastos: e.gastos.map(function (g) { return [g[0], 0]; }),
+        personas: [["", 160, 0, 0]],
+        merma: 10, imss: state.mode === "despacho" ? 30 : 0, isn: state.mode === "despacho" ? 3 : 0,
+        com: 0, imp: 5, uti: 30, iva: 16
+      };
+      renderAll(); toast("Listo: conceptos en $0 para que captures los tuyos.");
+    });
+    $("btn-pdf").addEventListener("click", descargarPDF);
+    renderAll();
+  });
+
+  window.__calcular = calcular; window.__EJEMPLOS = EJEMPLOS;
+})();
+</script>
+</body>
+</html>
